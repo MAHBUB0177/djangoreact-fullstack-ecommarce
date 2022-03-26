@@ -8,9 +8,11 @@ User = get_user_model()
 
 
 class Customer(models.Model):
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150, blank=True, null=True)
     mobile = models.CharField(max_length=16)
+    prof_image= models.ImageField(upload_to='profile/', blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     username = models.CharField(
         max_length=150, unique=True, blank=True, null=True)
@@ -19,6 +21,7 @@ class Customer(models.Model):
         return self.user.email
 
 
+    
 @receiver(post_save, sender=User)
 def createCustomer(sender, instance, created, *args, **kwargs):
     if created:
@@ -138,3 +141,11 @@ class Order(models.Model):
     order_status = models.CharField(
         max_length=100, choices=ORDER_STATUS, default="Order Received")
     date = models.DateTimeField(auto_now_add=True)
+    
+class profile(models.Model):
+    # name=models.CharField(max_length=300,blank=True)
+    prouser = models.OneToOneField(User,on_delete=models.CASCADE)
+    prof_image = models.ImageField(upload_to='logo/', blank=True, null=True)
+    
+    def __str__(self):
+        return self.prouser.username

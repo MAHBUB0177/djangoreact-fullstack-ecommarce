@@ -6,6 +6,15 @@ import AllProducts from "../common/AllProducts";
 import { domain } from "../env";
 
 const SingleBrandsProducts = () => {
+
+  const [cartItem, setCartItem] = useState(() => {
+    const saved = localStorage.getItem("cart");
+    console.log('getcart', saved)
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
+  console.log('check cart productdetails', cartItem)
+
   const { id } = useParams();
   const [brand, setBrand] = useState(null);
   useEffect(() => {
@@ -21,15 +30,15 @@ const SingleBrandsProducts = () => {
     getSingleBrand();
   }, []);
   return (
-    <Container>
+    <Container style={{marginTop:'30px'}}>
       <Grid container direction="column" alignItems="center">
-        <Typography variant="h3">{brand?.title}</Typography>
-        <Typography variant="p">{brand?.details}</Typography>
+        <Typography variant="h3" style={{borderBottom:'3px solid green'}}>{brand?.title}</Typography>
+        {/* <Typography variant="p">{brand?.details}</Typography>
         <img
           style={{ width: "100%", padding: "10px" }}
           alt={brand?.title}
           src={brand?.logo}
-        />
+        /> */}
         <AllProducts products={brand?.products} showall={true} />
       </Grid>
     </Container>

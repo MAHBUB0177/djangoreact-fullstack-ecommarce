@@ -10,9 +10,31 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import *
 from .serializers import *
+from django.contrib.auth.models import User
+
+from django.views.generic import TemplateView, ListView
+from rest_framework import generics
 
 
+class AllproductView(APIView):
+    authentication_classes=[TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
+    # serializer_class = ProductSerializer
 
+    def post(self,request):
+        print(request.data)
+        serializers = ProductSerializer(data=request.data)
+        return Response({})
+        # app_user_id = self.request.session.get('app_user_id')
+        # branch_code = self.request.session.get('branch_code')
+        # id = self.request.query_params.get('item', None)
+        # queryset = Product.objects.filter().order_by('-title')
+        
+        # if id:
+        #     queryset=queryset.filter(id=id)
+        
+
+        # return queryset
 
 class CategoryProductView(APIView):
     def get(self, request):
@@ -121,6 +143,7 @@ class SliderView(APIView):
         return Response(slider_serializer)
 
 
+
 class AddViewProduct(APIView):
     def post(self, request):
         p_id = request.data['id']
@@ -176,12 +199,14 @@ class ProfileView(APIView):
 
     def get(self, request):
         customer_obj = Customer.objects.get(user=request.user)
-        customer_ser = CustomerSerializer(customer_obj).data
+        customer_ser = CustomerSerializer(customer_obj,many=True, context={'request': request}).data
         return Response(customer_ser)
 
 
 class RegisterUserView(APIView):
     def post(self, request):
+        data=request.data
+        print(data)
         serializers = UserSerializer(data=request.data)
         if serializers.is_valid(raise_exception=True):
             serializers.save()
@@ -195,6 +220,70 @@ class ProfileView(APIView):
     authentication_classes = [TokenAuthentication]
     
     def get(self,request):
+        print(request.user)
         customer_obj=Customer.objects.get(user=request.user)
         customer_ser=CustomerSerializer(customer_obj).data
         return Response(customer_ser)
+
+
+
+
+class Updateuser(APIView):
+    permission_classes=[IsAuthenticated, ]
+    authentication_classes=[TokenAuthentication, ]
+    
+    def post(self,request):
+        try:
+            user = request.user
+            print(user)
+            data = request.data
+            name=data.name
+            print(data)
+            user_obj = Customer.objects.get(username=name)
+            # user_obj=Customer.objects.get(user=request.user)
+            user_obj.username = data["username"]
+            # user_obj.email = data["email"]
+            user_obj.mobile = data["mobile"]
+            user_obj.save()
+            response_data = {"error":False,"message":"User Data is Updated"}
+        except:
+            response_data = {"error":True,"message":"User Data is not Update Try agane !"}
+        return Response(response_data)
+            
+class updateimage(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    
+    def post(self,request):
+        # try:
+        
+        data=request.data
+        print(data)
+        id=request.user.id
+        print(id)
+        customer_obj=Customer.objects.get(id=request.user.id)
+        print(customer_obj,"i am...")
+        customer_ser=CustomerSerializer(customer_obj,context={'request':request}).data
+        if customer_ser.is_valid(raise_exception=True):
+            customer_ser.save()
+            # response_data = {"error":False,"message":"User Data is Updated"}
+            print(customer_ser,"ok i am..")
+        # except:
+        #     response_data = {"error":True,"message":"User Data is not Update Try agane !"}
+        return Response(customer_ser)
+    
+class MyCart(APIView):
+    authentication_classes=[TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
+    
+    def list(self,request):
+        query = Cart.objects.filter(customer=request.user)
+        serializers = CartSerializer(query,many=True)
+        # all_data=[]
+        # for cart in serializers.data:
+        #     cart_product = CartProduct.objects.filter(cart=cart["id"])
+        #     cart_product_serializer = CartProductSerializer(cart_product,many=True)
+        #     cart["cartproduct"] = cart_product_serializer.data
+        #     all_data.append(cart)
+        return Response(serializers.data)
+    

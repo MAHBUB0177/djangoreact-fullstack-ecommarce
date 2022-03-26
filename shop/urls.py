@@ -1,9 +1,14 @@
 
 from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import *
+
+router = routers.DefaultRouter()
+router.register('cart',MyCart,basename="MyCart")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('categoryproducts/', CategoryProductView.as_view()),
@@ -20,6 +25,10 @@ urlpatterns = [
     path('search/<str:q>/', SearchView.as_view()),
     path('apilogin/', obtain_auth_token),
     path('profile/', ProfileView.as_view()),
+   
     path('register/', RegisterUserView.as_view()),
+    path('updateuser/', Updateuser.as_view()),
+    path('Updateimage/', updateimage.as_view()),
+    path('appproduct/', AllproductView.as_view()),
    
 ]

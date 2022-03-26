@@ -7,10 +7,41 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import SendIcon from '@material-ui/icons/Send'
 import SingleReview from '../common/SingleReview'
 import Cookies from 'js-cookie'
+import Swal from 'sweetalert2'
+import {useStateValue} from '../state/stateProvider'
 
 
 
 const ProductDetails = () => {
+const [{ profile, }, dispatch] = useStateValue();
+const[cart,setCart]=useState([])
+  console.log('this is cart',cart)
+
+   const addToCart =(product)=>{
+     console.log("mahbub alam",product)
+     const newCart=[...cart,product]
+     setCart(newCart)
+
+     Swal.fire({
+        icon: 'success',
+        title: 'Thank you',
+        text: 'Your product Is Added SuccessFully To The Cart!!!!',
+        timer: 1200
+        
+      })
+
+     
+   }
+
+   useEffect(() => {
+    // storing input name
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+
+
+  
+
     const [product, setProduct] = useState(null);
     const { id}  = useParams()
     console.log(Cookies.get("csrftoken"))
@@ -21,6 +52,7 @@ const ProductDetails = () => {
                 method:'GET',
             }).then(response=>{
                 setProduct(response.data[0])
+                console.log(response.data[0])
             })
         }
         getproductdetailse()
@@ -36,7 +68,7 @@ const ProductDetails = () => {
                     'id':id
                 }
             }).then(response=>{
-                console.log("ProductDetails",response.data);
+                // console.log("ProductDetails",response.data);
             })
         }
         addproductview()
@@ -94,10 +126,20 @@ const ProductDetails = () => {
                                        fontSize:'40px',
                                         color: 'black'
                                  }} component='span' >{ product?.price} TK</Box>
-                                 <Box style={{margin:'10px 0px'}}>
 
-                                 <Button size='large' variant='outlined' >Add To Cart</Button>
-                                 </Box>
+                                 {
+                                     profile === null ? (<Box style={{margin:'10px 0px'}}>
+
+                                     <Button size='large' variant='outlined' class="btn btn-primary" >Add To Cart</Button>
+                                     </Box>) :
+
+                                     (<Box style={{margin:'10px 0px'}}>
+
+                                     <Button size='large' variant='outlined' class="btn btn-primary" onClick={()=>addToCart(product)}>Add To Cart</Button>
+                                     </Box>)
+
+                                 }
+                                 
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={6} lg={6} >

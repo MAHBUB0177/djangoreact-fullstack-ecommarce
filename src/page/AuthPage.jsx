@@ -69,7 +69,7 @@ const AuthPage = () => {
                 if (response.data['error'] === false) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Oops...',
+                        // title: 'Oops...',
                         text: 'Registered Successfully!!',
                         timer: 1000
                         

@@ -12,11 +12,13 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'password', 'email',)
+        fields = ('id', 'password','username', 'email',)
         extra_kwargs = {'password': {"write_only": True, 'required': True}, }
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
+        Customer.objects.create(user=user)
         return user
 
 
@@ -24,11 +26,13 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = "__all__"
-
+   
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['user'] = UserSerializer(instance.user, ).data
         return response
+    
+    
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -104,6 +108,7 @@ class SliderSerializer(serializers.ModelSerializer):
         return request.url(image)
 
 
+    
 class ProductViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductView
@@ -116,3 +121,9 @@ class ProductViewSerializer(serializers.ModelSerializer):
             instance.product, context={'request': request}).data
         return response
         
+
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = "__all__"
+        depth = 1

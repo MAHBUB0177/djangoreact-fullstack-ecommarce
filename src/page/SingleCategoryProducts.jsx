@@ -24,16 +24,16 @@ const SingleCategoryProducts = () => {
     getproducts();
   }, []);
   return (
-    <Container>
+    <Container style={{marginTop:'30px'}}>
       
       <Grid container direction="column" alignItems="center">
-        <Typography variant="h3">{category?.title}</Typography>
-        <Typography variant="p">{category?.details}</Typography>
+        <Typography variant="h3" style={{borderBottom:'3px solid green'}}>{category?.title}</Typography>
+        {/* <Typography variant="p">{category?.details}</Typography>
         <img
-          style={{ width: "100%", padding: "10px" }}
+          style={{ width: "200px", padding: "10px" }}
           alt={category?.title}
           src={category?.image}
-        />
+        /> */}
         <AllProducts products={category?.products} showall={true} />
       </Grid>
     </Container>

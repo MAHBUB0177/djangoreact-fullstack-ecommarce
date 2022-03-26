@@ -24,6 +24,7 @@ const Sliders = () => {
   <Carousel
     interval= '5000'
     stopAutoPlayOnHover = 'true'
+    style={{marginTop:'30px'}}
   >
     {
       slides?.map((item,i)=><SliderItem key={i} item={item} />)

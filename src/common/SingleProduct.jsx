@@ -8,29 +8,71 @@ import {
   CardMedia,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect,useState } from "react";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Link } from 'react-router-dom';
+import ProductDetails from "../page/ProductDetails";
+import Swal from 'sweetalert2'
+// import { useStateValue } from '../state/stateProvider';
+import {useStateValue} from '../state/stateProvider'
 
-const SingleProduct = ({ product }) => {
+
+const SingleProduct = (props) => {
+
+  const [{ profile, }, dispatch] = useStateValue();
+
+
+ 
+  // const[cart,setCart]=useState([])
+  // console.log('this is cart',cart)
+ 
+
+  //  const addToCart =(product)=>{
+  //    console.log("mahbub alam",product)
+  //    const newCart=[...cart,product]
+  //    console.log(newCart,'this is list of cart product')
+  //    setCart(newCart)
+  //   //  window.location.reload(false);
+  //    dispatch({type:'ADD_TO_CART',
+  //    pagereload:cart
+  //  })
+
+  //    Swal.fire({
+  //     icon: 'success',
+  //     title: 'Thank you',
+  //     text: 'Your product Is Added SuccessFully To The Cart!!!!',
+  //     timer: 1200
+      
+  //   })
+  //  }
+
+ 
+
+
+
+
+ 
+ 
  
   return (
+
+    
     <Card>
-      <Link to={`/product-${product.title}-${product.id}`} style={{textDecoration:'none'}}>
+      <Link to={`/product-${props.product.title}-${props.product.id}`} style={{textDecoration:'none'}}>
         <CardActionArea  >
-          <CardMedia component="img" height="250" image={product?.image} />
+          <CardMedia component="img" height="250" image={props.product?.image} />
         </CardActionArea>
       </Link>
 
 
-      <Link to={`/product-${product.title}-${product.id}`}  style={{textDecoration:'none'}}>
+      <Link to={`/product-${props.product.title}-${props.product.id}`}  style={{textDecoration:'none'}}>
         <CardActionArea >
           <CardContent>
             <Typography align="center" variant="h6">
-              {product?.title}
+              {props.product?.title}
             </Typography>
             <Typography align="center">
-              {product?.oldprice && (
+              {props.product?.oldprice && (
                 <Box
                   component="span"
                   style={{
@@ -41,7 +83,7 @@ const SingleProduct = ({ product }) => {
                     padding: "5px",
                   }}
                 >
-                  {product?.oldprice}TK
+                  {props.product?.oldprice}TK
                 </Box>
               )}
               <Box
@@ -52,28 +94,54 @@ const SingleProduct = ({ product }) => {
                   padding: "5px",
                 }}
               >
-                {product?.price}TK
+                {props.product?.price}TK
               </Box>
             </Typography>
           </CardContent>
         </CardActionArea>
       </Link>
 
-      <CardActions
-        style={{
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          endIcon={<AddShoppingCartIcon />}
-          variant="outlined"
-          size="small"
-          color="primary"
-        >
-          Add To Cart
-        </Button>
-      </CardActions>
+{
+
+  profile === null ? <CardActions
+  style={{
+    justifyContent: "center",
+  }}
+>
+  <Button 
+   
+  //  onClick={()=>addToCart(product)}
+    endIcon={<AddShoppingCartIcon />}
+    variant="outlined"
+    size="small"
+    color="primary"
+  >
+    Add To Cart
+  </Button>
+</CardActions> :
+<CardActions
+  style={{
+    justifyContent: "center",
+  }}
+>
+  <Button 
+   
+  //  onClick={()=>countProduct(product)}
+   onClick={() => props.countProduct(props.product)}
+    endIcon={<AddShoppingCartIcon />}
+    variant="outlined"
+    size="small"
+    color="primary"
+  >
+    Add To Cart
+  </Button>
+</CardActions>
+
+}
+      
+    
     </Card>
+   
   );
 };
 

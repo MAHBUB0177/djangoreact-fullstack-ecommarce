@@ -26,7 +26,7 @@ const SearchResultPage = () => {
  }, [q])
  return (
   <Container>
-            <Typography variant='h4' >Search Result For:"{q}"</Typography>
+            {/* <Typography variant='h4' >Search Result For:"{q}"</Typography> */}
             <Grid container direction='column'>
                 {
                     result?.brand?.length !== 0 && <Grid container

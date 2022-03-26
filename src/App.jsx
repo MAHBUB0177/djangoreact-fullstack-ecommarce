@@ -25,10 +25,12 @@ import { useStateValue } from './state/stateProvider';
 import OrderPage from './page/OrderPage'
 import ProfilePage from './page/ProfilePage';
 import Footer from './components/Footer';
-
+import Contact from './page/Contact';
+import NotFound from './page/NotFound';
+// import About from './page/About';
 
 function App() {
-  const [{ profile }, dispatch] = useStateValue();
+  const [{ profile,pagereload }, dispatch] = useStateValue();
 
  
 
@@ -57,7 +59,24 @@ function App() {
    
   }
   getprofile()
+}, [pagereload])
+
+useEffect(() => {
+  if (profile !== null) {
+    const getdata = async () => {
+      await axios({
+        method: "get",
+        url: `${domain}/api/cart/`,
+        headers: getheader
+      }).then(res => {
+        console.log('cart data',res.data);
+       
+      })
+    }
+    getdata()
+  }
 }, [])
+
  return (
   <>
 
@@ -72,17 +91,20 @@ function App() {
      <Route path="/brand-:title-:id" element={< SingleBrandsProducts/>}/>
      <Route path="/q-:q" element={< SearchResultPage/>}/>
      <Route path="/login" element={< AuthPage/>}/>
+     {/* <Route path="/about" element={< About/>}/> */}
      
 {
   profile !== null &&
   <>
   <Route path='/order' element ={<OrderPage />}/>
   <Route  path='/profile-:username' element={<ProfilePage/>}/>
+  <Route  path='/Contact' element={<Contact/>}/>
 
   </>
 }
-<Route element={< AuthPage/>}/>
-
+<Route exact element={ AuthPage}/>
+<Route path="*" element={<NotFound />}/>
+  
     </Routes>
   <Footer></Footer>
    </Router>

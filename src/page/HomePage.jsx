@@ -11,7 +11,6 @@ import TrandingProducts from '../components/TrandingProducts';
 const HomePage = () => {
  return (
   <div>
- {/* <NabBar/> */}
  
 
    <Container>

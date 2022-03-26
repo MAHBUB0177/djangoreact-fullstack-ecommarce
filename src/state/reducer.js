@@ -1,5 +1,8 @@
 export const initialState={
-   profile:null
+   profile:null,
+//    Cartlength:0,
+  pagereload:null,
+
 }
 
 const reducer = (state,action)=>{
@@ -10,9 +13,17 @@ const reducer = (state,action)=>{
                ...state,
                profile:action.value
            }
+       case 'ADD_TO_CART':
+           return{
+            ...state,
+            pagereload:action.pagereload
+            }
 
-         // default:
-         //    state
+         default:
+           return{
+                ...state
+             }
+            
    }
 }
 

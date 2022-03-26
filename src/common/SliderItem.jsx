@@ -6,6 +6,7 @@ const SliderItem = ({item}) => {
  return (
   <Paper
   style={{
+      marginTop:'30px',
       paddingTop:'10px',
       height:'400px',
       width:'100%',
