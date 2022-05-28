@@ -12,7 +12,7 @@ import React, { useEffect,useState } from "react";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { Link } from 'react-router-dom';
 import ProductDetails from "../page/ProductDetails";
-import Swal from 'sweetalert2'
+
 // import { useStateValue } from '../state/stateProvider';
 import {useStateValue} from '../state/stateProvider'
 
@@ -33,9 +33,12 @@ const SingleProduct = (props) => {
   //    console.log(newCart,'this is list of cart product')
   //    setCart(newCart)
   //   //  window.location.reload(false);
-  //    dispatch({type:'ADD_TO_CART',
-  //    pagereload:cart
-  //  })
+  // //    dispatch({type:'ADD_TO_CART',
+  // //    pagereload:cart
+  // //  })
+
+  //   // const sameProduct = newCart.filter(pd => pd.id === product.id);
+  //   // const count = sameProduct.length;
 
   //    Swal.fire({
   //     icon: 'success',
@@ -45,6 +48,11 @@ const SingleProduct = (props) => {
       
   //   })
   //  }
+
+
+  //  useEffect(() => {
+  //   localStorage.setItem("cart", JSON.stringify(cart))
+  // }, [cart]);
 
  
 
@@ -127,7 +135,7 @@ const SingleProduct = (props) => {
   <Button 
    
   //  onClick={()=>countProduct(product)}
-   onClick={() => props.countProduct(props.product)}
+   onClick={() => props?.countProduct(props.product)}
     endIcon={<AddShoppingCartIcon />}
     variant="outlined"
     size="small"

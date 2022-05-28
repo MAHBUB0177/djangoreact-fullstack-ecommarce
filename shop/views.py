@@ -49,19 +49,7 @@ class CategoryProductView(APIView):
         return Response(data)
 
 
-# class SingleBrandsProducts(APIView):
-#     def get(self, request, pk):
-#         brand_obj = Brand.objects.filter(id=pk)
-#         brand_serializer = BrandSerializer(
-#             brand_obj, many=True, context={'request': request})
-#         data = []
-#         for brand in brand_serializer.data:
-#             brandProducts = Product.objects.filter(brand=brand['id'])
-#             brandProducts_serializer = ProductSerializer(
-#                 brandProducts, many=True, context={'request': request})
-#             brand['products'] = brandProducts_serializer.data
-#             data.append(brand)
-#         return Response(data)
+
 
 class SingleBrandsProducts(APIView):
     def get(self,request,pk):
@@ -74,6 +62,58 @@ class SingleBrandsProducts(APIView):
             brand['products']=brandProducts_serializer
             data.append(brand)
             return Response(data)
+        
+        
+class singleproduct(APIView):
+    def get(self,request,pk):
+        prod_obj=Product.objects.filter(id=pk)
+        prod_serializers=ProductSerializer(
+                prod_obj, many=True, context={'request': request}).data
+        return Response(prod_serializers)
+    
+class singleeditproduct(APIView):
+    def get(Self,request,update_product = True):
+        print(request.data['userId'])
+        print(request.data['title'])
+        print(request.data['price'])
+        
+        prod_obj=Product.objects.filter(id=request.data['userId'])
+        # if update_product:
+        #     prod_obj.title=request.data['title']
+        #     prod_obj.price=request.data['price']
+        #     prod_obj.save()
+            
+        prod_serializers=ProductSerializer(
+                prod_obj, many=True, context={'request': request}).data
+        return Response(prod_serializers)
+    
+    
+    
+###############################
+class singleeditproductupdate(APIView):
+    
+    permission_classes=[IsAuthenticated, ]
+    authentication_classes=[TokenAuthentication, ]
+    
+    def get(Self,request,update_product = True):
+        # print(request.data['userId'],'mahbub alam is a soft')
+        print('mahbub alam is a soft')
+        print(request.data['price'])
+        
+        prod_obj=Product.objects.filter(id=request.data['userId'])
+        if update_product:
+            prod_obj.title=request.data['title']
+            prod_obj.price=request.data['price']
+            prod_obj.save()
+            
+        # prod_serializers=ProductSerializer(
+        #         prod_obj, many=True, context={'request': request}).data
+        return Response(prod_obj)
+
+
+
+
+#########################
 
 class SingleCategoryView(APIView):
     def get(self, request, pk):
@@ -96,7 +136,12 @@ class CategorisView(APIView):
             categoris_obj, many=True, context={'request': request}).data
         return Response(category_serializer)
 
-
+class allproductView(APIView):
+    def get(self,request):
+        prod_obj=Product.objects.all()
+        prod_serializers=ProductSerializer(
+                prod_obj, many=True, context={'request': request}).data
+        return Response(prod_serializers)
 class SingleProductView(APIView):
     def get(self, request, pk):
         product_obj = Product.objects.filter(id=pk)
@@ -125,6 +170,14 @@ class BrandSNameView(APIView):
         brand_serializers = BrandSerializer(
             brand_obj, many=True, context={'request': request}).data
         return Response(brand_serializers)
+    
+
+# class ProductView(APIView):
+#     def get(self, request):
+#         prod_obj = Product.objects.all()
+#         prod_serializers = ProductSerializer(
+#             prod_obj, many=True, context={'request': request}).data
+#         return Response(prod_serializers)
 
 
 class TrandingProductsView(APIView):
@@ -160,6 +213,7 @@ class AddViewProduct(APIView):
 class MostViewsProducts(APIView):
     def get(self, request):
         p_obj = ProductView.objects.all().order_by('-view')[:12]
+        print(p_obj)
         p_obj_data = ProductViewSerializer(
             p_obj, many=True, context={'request': request}).data
         return Response(p_obj_data)
@@ -228,6 +282,36 @@ class ProfileView(APIView):
 
 
 
+# class Updateuser(APIView):
+#     permission_classes=[IsAuthenticated, ]
+#     authentication_classes=[TokenAuthentication, ]
+    
+#     def post(self,request):
+#         try:
+#             user = request.user
+#             print(user)
+#             id = request.data['id']
+#             print(id)
+#             username = request.data['username']
+#             print(username)
+            
+#             # user_obj = Customer.objects.get(username=name)
+#             data_obj=Customer.objects.filter(id=10)
+#             print(data_obj)
+#             user_obj=Customer.objects.filter(id=request.data['id'])
+#             print(user_obj,'profile data')
+#             user_obj.username = request.data['username']
+#             print(request.data,'prfile image')
+#             # user_obj.email = data["email"]
+#             user_obj.mobile = request.data["mobile"]
+#             # user_obj.username.save()
+#             user_obj.save()
+#             response_data = {"error":False,"message":"User Data is Updated"}
+#         except:
+#             response_data = {"error":True,"message":"User Data is not Update Try agane !"}
+#         return Response(response_data)
+
+
 class Updateuser(APIView):
     permission_classes=[IsAuthenticated, ]
     authentication_classes=[TokenAuthentication, ]
@@ -236,20 +320,24 @@ class Updateuser(APIView):
         try:
             user = request.user
             print(user)
-            data = request.data
-            name=data.name
-            print(data)
-            user_obj = Customer.objects.get(username=name)
-            # user_obj=Customer.objects.get(user=request.user)
-            user_obj.username = data["username"]
-            # user_obj.email = data["email"]
-            user_obj.mobile = data["mobile"]
+            data = request.data['id']
+            obj_data=Customer.objects.filter(user_id=request.data['id'])
+            print(obj_data,'user data')
+            print(data,'user_id')
+            # user_obj = Customer.objects.get(username=name)
+            user_obj=Customer.objects.get(user_id=request.data['id'])
+            user_obj.username = request.data["username"]
+            user_obj.email =request.data["email"]
+            user_obj.mobile = request.data["phone"]
             user_obj.save()
+            
             response_data = {"error":False,"message":"User Data is Updated"}
         except:
             response_data = {"error":True,"message":"User Data is not Update Try agane !"}
         return Response(response_data)
-            
+    
+    
+    
 class updateimage(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -257,33 +345,38 @@ class updateimage(APIView):
     def post(self,request):
         # try:
         
+        user_obj=Customer.objects.get(user=request.user)
+        print(user_obj,"i am...")
         data=request.data
         print(data)
-        id=request.user.id
-        print(id)
-        customer_obj=Customer.objects.get(id=request.user.id)
-        print(customer_obj,"i am...")
-        customer_ser=CustomerSerializer(customer_obj,context={'request':request}).data
-        if customer_ser.is_valid(raise_exception=True):
+        customer_ser=CustomerSerializer(user_obj,data=data,context={'request':request})
+        if customer_ser.is_valid():
             customer_ser.save()
             # response_data = {"error":False,"message":"User Data is Updated"}
             print(customer_ser,"ok i am..")
         # except:
         #     response_data = {"error":True,"message":"User Data is not Update Try agane !"}
-        return Response(customer_ser)
+        return Response(customer_ser.data)
+            
+# class updateimage(APIView):
+#     permission_classes = [IsAuthenticated]
+#     authentication_classes = [TokenAuthentication]
     
-class MyCart(APIView):
-    authentication_classes=[TokenAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
+#     def post(self,request):
+#         # try:
+        
+#         data=request.data.id
+#         print(data)
+#         customer_obj=Customer.objects.get(id=request.user.id)
+#         print(customer_obj,"i am...")
+#         customer_ser=CustomerSerializer(customer_obj,context={'request':request}).data
+#         if customer_ser.is_valid(raise_exception=True):
+#             customer_ser.save()
+#             # response_data = {"error":False,"message":"User Data is Updated"}
+#             print(customer_ser,"ok i am..")
+#         # except:
+#             # response_data = {"error":True,"message":"User Data is not Update Try agane !"}
+#         return Response(customer_ser)
     
-    def list(self,request):
-        query = Cart.objects.filter(customer=request.user)
-        serializers = CartSerializer(query,many=True)
-        # all_data=[]
-        # for cart in serializers.data:
-        #     cart_product = CartProduct.objects.filter(cart=cart["id"])
-        #     cart_product_serializer = CartProductSerializer(cart_product,many=True)
-        #     cart["cartproduct"] = cart_product_serializer.data
-        #     all_data.append(cart)
-        return Response(serializers.data)
+
     

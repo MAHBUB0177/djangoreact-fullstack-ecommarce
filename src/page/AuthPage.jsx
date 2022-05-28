@@ -1,6 +1,6 @@
 import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { domain } from '../env'
 import Cookies from 'js-cookie'
 import Swal from 'sweetalert2'
@@ -35,12 +35,10 @@ const AuthPage = () => {
                     title: 'Oops...',
                     text: 'Something is missing!!!!',
                     timer: 1500
-                    // footer: '<a href="">Why do I have this issue?</a>'
                   })
             }
            
         }).catch(_ => {
-            // alert("Somthing is Wrong !! Try Agail !")
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -51,6 +49,9 @@ const AuthPage = () => {
         })
     }
 
+     useEffect(() => {
+    localStorage.setItem("csrftoken", JSON.stringify('mahbub'))
+  }, []);
 
     /////
     const register = async () => {
@@ -69,7 +70,6 @@ const AuthPage = () => {
                 if (response.data['error'] === false) {
                     Swal.fire({
                         icon: 'success',
-                        // title: 'Oops...',
                         text: 'Registered Successfully!!',
                         timer: 1000
                         
@@ -77,7 +77,6 @@ const AuthPage = () => {
                     setRegisternow(false)
                 }
                 else {
-                    // alert("Somthing is Wrong Try Agan !!")
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -90,7 +89,6 @@ const AuthPage = () => {
             })
         }
         else {
-            // alert(" Password Not Matchd !!")
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

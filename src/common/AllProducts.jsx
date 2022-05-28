@@ -1,46 +1,50 @@
 import DoubleArrowSharpIcon from "@material-ui/icons/DoubleArrowSharp";
 import { Button, Grid } from '@mui/material';
-import { typography } from '@mui/system';
-import React, {useState,useEffect}from 'react';
+import {  Typography } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 import SingleProduct from './SingleProduct';
 
-const AllProducts = ({ products, showall = false,category,categoryid }) => {
+const AllProducts = ({ products, showall = false, category, categoryid }) => {
 
   const [cart, setCart] = useState([])
-  // useEffect(() => {
-  //   localStorage.setItem("cart", JSON.stringify(cart))
-  // }, [cart]);
+  console.log('minnnnn allll okkk',cart)
+  
   const countProduct = (product) => {
-    console.log('minnnnn allll okkk')
+    
     const newCart = [...cart, product];
     setCart(newCart)
-    // e.preventDefault();
     localStorage.setItem("cart", JSON.stringify(cart))
-    // e.preventDefault();
 
-   
+      Swal.fire({
+      icon: 'success',
+      title: 'Thank you',
+      text: 'Your product Is Added SuccessFully To The Cart!!!!',
+      timer: 1200
+      
+    })
 
   }
 
   return (
-    <Grid container spacing={2} style={{marginTop:'15px'}}>
+    <Grid container spacing={2} style={{ marginTop: '15px' }}>
 
       {products?.map((item, i) => (
         <>
           {
             showall ? (<Grid key={i} md={2} sm={4} item>
-              <SingleProduct product={item} 
-              countProduct={countProduct}/>
+              <SingleProduct product={item}
+                countProduct={countProduct} />
             </Grid>) : (
               <>
                 {
                   i <= 10 && (<Grid key={i} md={2} sm={4} item>
-                    <SingleProduct product={item} 
-                     countProduct={countProduct}/>
+                    <SingleProduct product={item}
+                      countProduct={countProduct} />
                   </Grid>)
                 }
-                
+
 
               </>
             )
@@ -50,8 +54,8 @@ const AllProducts = ({ products, showall = false,category,categoryid }) => {
 
       ))}
 
-    
-{products?.length > 11 && !showall && (
+
+      {products?.length > 11 && !showall && (
         <Grid
           item
           md={2}
@@ -62,13 +66,13 @@ const AllProducts = ({ products, showall = false,category,categoryid }) => {
             alignItems: "center",
           }}
         >
-         
-         <Link to={`/category-${category}-${categoryid}`} style={{textDecoration:'none'}} >
+
+          <Link to={`/category-${category}-${categoryid}`} style={{ textDecoration: 'none' }} >
             <Button >
-              <typography>See More</typography>
+              <Typography>See More</Typography>
               <DoubleArrowSharpIcon />
             </Button>
-            </Link>
+          </Link>
         </Grid>
       )}
 

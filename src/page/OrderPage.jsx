@@ -6,6 +6,17 @@ import { Button, Box } from '@material-ui/core';
 import { Typography } from '@mui/material';
 import Swal from 'sweetalert2'
 
+import {Card} from 'react-bootstrap';
+
+
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const OrderPage = () => {
 
@@ -67,9 +78,14 @@ setCartItem(newCart)
 }
 
   return (
+    <div className='  container col-md-12' style={{  marginTop: '30px' }} >
+      <div class="col-12 col-lg-8 text-center">
+                                <span class="dri dri-cart fa-2x bg-primary rounded-circle"></span>
+                                <h2 class="mt-3">Shopping <font class="text-primary">Cart</font></h2>
+                            </div>
 
-    <div className='  container col-md-12' style={{ display: 'flex', marginTop: '30px' }} >
-      <div className='col-md-8' style={{ borderLft: '1px solid gray', borderRight: '1px solid black' }}>
+    {/* // <div className='  container col-md-12' style={{ display: 'flex', marginTop: '30px' }} > */}
+      {/* <div className='col-md-8' style={{ borderLft: '1px solid gray', borderRight: '1px solid black' }}>
         {
           cartItem?.map((item, i) =>
             <div class="card" style={{ width: '22rem', display: 'inline-block', marginRight: '10px', marginBottom: '20px' }}>
@@ -125,7 +141,59 @@ setCartItem(newCart)
         <Button class="btn btn-info" style={{ textAlign: 'center' }} onClick={confirmOrder}>Confirm</Button>
         </>
 }
-      </div>
+      </div> */}
+
+
+
+
+<div className="row col-12" style={{display:'flex'}}>
+  <div className='col-md-7 col-lg-7'>
+<TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>item</TableCell>
+            <TableCell align="right">image</TableCell>
+            <TableCell align="right">quantity</TableCell>
+            <TableCell align="right">price</TableCell>
+            <TableCell align="right">TotalPrice</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {cartItem.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.title}
+              </TableCell>
+              {/* <TableCell align="right">{row.image}</TableCell> */}
+              <TableCell align="right"><img src={row.image} alt="" style={{ border: '3', height: '70px', width: '100px' }}></img></TableCell>
+              <TableCell align="right">{row.price}</TableCell>
+              <TableCell align="right">{row.price}</TableCell>
+              <TableCell align="right">{row.carbs}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    </div>
+
+    <div className='col-md-5 col-lg-5'>
+    <Card style={{ width: '25rem' }}>
+  <Card.Body>
+    <Card.Title>Card Title</Card.Title>
+    <Card.Text>
+      Some quick example text to build on the card title and make up the bulk of
+      the card's content.
+    </Card.Text>
+    <Button variant="primary">Go somewhere</Button>
+  </Card.Body>
+</Card>
+
+    </div>
+    </div>
 
     </div>
   );

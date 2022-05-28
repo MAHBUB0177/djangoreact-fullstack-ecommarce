@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
+from django.db.models.signals import post_save ##signal import
+from django.dispatch import receiver ##receiver import 
+from rest_framework.authtoken.models import Token  ##token model import django drf built in model
 
 User = get_user_model()
 
@@ -21,12 +21,25 @@ class Customer(models.Model):
         return self.user.email
 
 
+# @receiver(post_save,sender=User)
+# def createCustomer(sender,instance,created,*args,**kwargs):##sender hosse user,instance hisebe user jkn make hbe tkn oi user er instance nitasi,create boolen trye or false return
+#     if created:
+#         Customer.objects.create(user=instance) ##user field er value hisebe instance ta dilam,cus mdl e akta req fiel seta user
+#         Token.objects.create(user=instance)##token mdl e user req field
     
 @receiver(post_save, sender=User)
 def createCustomer(sender, instance, created, *args, **kwargs):
     if created:
         Customer.objects.create(user=instance)
         Token.objects.create(user=instance)
+        
+# @receiver(post_save,sender=Customer)
+# def createUsername(sender,instance,created,*args,**kwargs):
+#     if created:
+#         instance.username=f'customer{instance.id}'
+        
+        
+    
 
 
 @receiver(post_save, sender=Customer)

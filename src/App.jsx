@@ -26,8 +26,11 @@ import OrderPage from './page/OrderPage'
 import ProfilePage from './page/ProfilePage';
 import Footer from './components/Footer';
 import Contact from './page/Contact';
-import NotFound from './page/NotFound';
+// import NotFound from './page/NotFound';
 // import About from './page/About';
+import DashBoard from './page/DashBoard.jsx'
+import FakeApi from './common/FakeApi';
+import UpdateProduct from './common/UpdateProduct';
 
 function App() {
   const [{ profile,pagereload }, dispatch] = useStateValue();
@@ -78,7 +81,10 @@ useEffect(() => {
 }, [])
 
  return (
-  <>
+   <div className="wrapper">
+{/* <DashBoard></DashBoard> */}
+   
+  
 
    <Router>
     <NabBar />
@@ -91,7 +97,9 @@ useEffect(() => {
      <Route path="/brand-:title-:id" element={< SingleBrandsProducts/>}/>
      <Route path="/q-:q" element={< SearchResultPage/>}/>
      <Route path="/login" element={< AuthPage/>}/>
-     {/* <Route path="/about" element={< About/>}/> */}
+     <Route path="/dashboard" element={< DashBoard/>}/>
+     <Route path="/fakeapi" element={< FakeApi/>}/>
+     <Route path="/editproduct" element={< UpdateProduct/>}/>
      
 {
   profile !== null &&
@@ -103,12 +111,13 @@ useEffect(() => {
   </>
 }
 <Route exact element={ AuthPage}/>
-<Route path="*" element={<NotFound />}/>
+{/* <Route path="*" element={<NotFound />}/> */}
   
     </Routes>
   <Footer></Footer>
    </Router>
-  </>
+  
+  </div>
  );
 }
 
