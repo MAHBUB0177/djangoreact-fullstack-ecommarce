@@ -16,6 +16,13 @@ from django.views.generic import TemplateView, ListView
 from rest_framework import generics
 
 
+class allproductview(APIView):
+    def get(self,request):
+        prod_obj=Product.objects.all()
+        prod_serializers=ProductSerializer(
+                prod_obj, many=True, context={'request': request}).data
+        return Response(prod_serializers)
+
 class AllproductView(APIView):
     authentication_classes=[TokenAuthentication, ]
     permission_classes = [IsAuthenticated, ]

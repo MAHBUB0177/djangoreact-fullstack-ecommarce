@@ -5,8 +5,9 @@ import Cookies from 'js-cookie'
 import { Button, Box } from '@material-ui/core';
 import { Typography } from '@mui/material';
 import Swal from 'sweetalert2'
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import {Card} from 'react-bootstrap';
+import {  IconButton } from '@mui/material';
 
 
 
@@ -27,6 +28,10 @@ const OrderPage = () => {
     return initialValue || "";
   });
   console.log('check cart orderpage', cartItem)
+
+  useEffect(()=>{
+    localStorage.setItem("cart",JSON.stringify(cartItem));
+   },[cartItem])
 
   var total = 0;
   for (let i = 0; i < cartItem.length; i++) {
@@ -78,7 +83,7 @@ setCartItem(newCart)
 }
 
   return (
-    <div className='  container col-md-12' style={{  marginTop: '30px' }} >
+    <div className='  container col-md-12' style={{  marginTop: '30px', }} >
       <div class="col-12 col-lg-8 text-center">
                                 <span class="dri dri-cart fa-2x bg-primary rounded-circle"></span>
                                 <h2 class="mt-3">Shopping <font class="text-primary">Cart</font></h2>
@@ -146,17 +151,21 @@ setCartItem(newCart)
 
 
 
-<div className="row col-12" style={{display:'flex'}}>
-  <div className='col-md-7 col-lg-7'>
-<TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+<div className="row" style={{display:'flex'}}>
+
+  { cartItem?.length > 0 && 
+    
+  <div className='col-md-7'>
+  <TableContainer component={Paper}>
+      <Table  aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>item</TableCell>
-            <TableCell align="right">image</TableCell>
-            <TableCell align="right">quantity</TableCell>
-            <TableCell align="right">price</TableCell>
+            <TableCell align="right">Image</TableCell>
+            <TableCell align="right">Quantity</TableCell>
+            <TableCell align="right">Price</TableCell>
             <TableCell align="right">TotalPrice</TableCell>
+            <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -173,26 +182,43 @@ setCartItem(newCart)
               <TableCell align="right">{row.price}</TableCell>
               <TableCell align="right">{row.price}</TableCell>
               <TableCell align="right">{row.carbs}</TableCell>
+              <TableCell align="right"  > <IconButton onClick={()=>removeItem(row?.id)}><span style={{color:'red'}}><DeleteIcon/></span></IconButton></TableCell>
+              
             </TableRow>
+            
           ))}
+          
         </TableBody>
+      
       </Table>
     </TableContainer>
     </div>
+    
+    }
 
-    <div className='col-md-5 col-lg-5'>
-    <Card style={{ width: '25rem' }}>
-  <Card.Body>
-    <Card.Title>Card Title</Card.Title>
-    <Card.Text>
-      Some quick example text to build on the card title and make up the bulk of
-      the card's content.
-    </Card.Text>
-    <Button variant="primary">Go somewhere</Button>
-  </Card.Body>
-</Card>
 
+          {
+                        cartItem?.length <=0 && <div className='alert alert-info container' >
+                         <h2 style={{textAlign:'center'}}> Yor Cart Is Empty !!!!!</h2>
+                         
+                        </div>
+                        
+          }
+
+
+  {  cartItem?.length > 0 && 
+  
+  <div className='col-md-5 ' style={{background:'#dce0dd',height:'300px',marginTop:'10px'}}>
+      <h4 style={{marginLeft:'300px',marginTop:'10px'}}>Order Total</h4>
+      <hr/>
+      <h6 style={{marginTop:'40px'}}>Subtotal</h6>
+      <h6 style={{marginTop:'40px'}}>Taxes</h6>
+
+      <hr/>
+      <h4>Total</h4>
     </div>
+    }
+
     </div>
 
     </div>

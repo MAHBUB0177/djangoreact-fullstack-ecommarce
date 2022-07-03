@@ -26,5 +26,6 @@ export const postheader = {
 
 export const posttokenheader = {
   Authorization: `token ${token}`,
+  
   "X-CSRFToken": csrftoken,
 };

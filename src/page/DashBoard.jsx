@@ -1,10 +1,29 @@
-import React, { Component } from 'react'
+import React, { Component ,useEffect,useState} from 'react'
+import axios from 'axios'
+import { domain } from '../env'
 
-export default class Dashboard extends Component {
- 
 
- 
- render() {
+const Dashboard=()=> {
+          const[product,setProduct]=useState([])
+//  render() {
+           let product_info=''
+           console.log(product.length,'mahbub alam')
+          useEffect(()=>{
+          const get_product=async()=>{
+                    await axios({
+                              url:`${domain}/api/allproductapiview/`,
+                              method:'GET',
+                    }).then(response=>{
+                              setProduct(response.data)
+                              
+                    })
+                    }
+                    get_product()
+          },
+          
+          [])
+
+
   return (
    <div>
     <div className="content-wrapper">
@@ -34,7 +53,7 @@ export default class Dashboard extends Component {
          {/* small box */}
          <div className="small-box bg-info">
           <div className="inner">
-           <h3>150</h3>
+           <h3>{product .length}</h3>
            <p>New Orders</p>
           </div>
           <div className="icon">
@@ -579,5 +598,9 @@ export default class Dashboard extends Component {
    </div>
 
   )
- }
+
+
+//  }
 }
+
+export default Dashboard;

@@ -21,6 +21,8 @@ urlpatterns = [
     path('singleproductapiview/<int:pk>/', singleeditproduct.as_view()),
     
     path('singleproductupdateapiview/', singleeditproductupdate.as_view()),
+    path('allproductapiview/', allproductview.as_view()),
+    
     
     path('brandsname/', BrandSNameView.as_view()),
     path('brandsname/', BrandSNameView.as_view()),
